@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Hooks Generator – Free Social Media & Content Tool</title>
+
+    <!-- Vercel Analytics Script -->
+    <script defer src="/_vercel/insights/script.js"></script>
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            padding: 16px; 
+            line-height: 1.5; 
+            max-width: 520px; 
+            margin: auto; 
+            background-color: #0f172a; 
+            color: #f8fafc; 
+        }
+        h2 { color: #38bdf8; text-align: center; font-size: 22px; margin-bottom: 6px; }
+        p.subtitle { text-align: center; color: #94a3b8; font-size: 13px; margin-bottom: 20px; }
+        
+        label { font-size: 13px; font-weight: 600; color: #cbd5e1; display: block; margin-top: 14px; margin-bottom: 6px; }
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: 1px solid #334155; 
+            background-color: #1e293b; 
+            color: #fff; 
+            font-size: 14px; 
+        }
+        input:focus, select:focus { outline: none; border-color: #38bdf8; }
+        
+        .btn-primary { 
+            width: 100%; 
+            padding: 13px; 
+            background: #38bdf8; 
+            color: #0f172a; 
+            font-weight: 700; 
+            border: none; 
+            border-radius: 8px; 
+            margin-top: 20px; 
+            cursor: pointer; 
+            font-size: 15px;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover { background: #0ea5e9; }
+        
+        .result-container { 
+            position: relative; 
+            margin-top: 22px; 
+            display: none; 
+        }
+        #result { 
+            padding: 16px; 
+            background: #1e293b; 
+            border-radius: 8px; 
+            border: 1px solid #334155; 
+            white-space: pre-line; 
+            font-size: 14px;
+            color: #e2e8f0;
+            min-height: 100px;
+        }
+        
+        .action-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .btn-secondary {
+            flex: 1;
+            padding: 10px;
+            background: #334155;
+            color: #f8fafc;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-secondary:hover { background: #475569; }
+        
+        footer {
+            text-align: center;
+            margin-top: 35px;
+            padding-top: 15px;
+            border-top: 1px solid #1e293b;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        footer a { color: #38bdf8; text-decoration: none; font-weight: 600; }
+        footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <h2>⚡ AI Hooks Generator</h2>
+    <p class="subtitle">Create viral hooks for your tweets, reels & posts in seconds.</p>
+
+    <label for="topic">What is your content about?</label>
+    <input type="text" id="topic" placeholder="e.g. How I built my first web app">
+
+    <label for="tone">Select Tone / Style:</label>
+    <select id="tone">
+        <option value="Viral">🔥 Viral & Catchy</option>
+        <option value="Professional">💼 Professional & Authoritative</option>
+        <option value="Casual">☕ Casual & Friendly</option>
+        <option value="Curiosity">🤔 Curiosity & Intrigue</option>
+    </select>
+
+    <button id="generateBtn" class="btn-primary" onclick="generateHooks()">Generate Hooks</button>
+
+    <div class="result-container" id="resultContainer">
+        <div id="result"></div>
+        <div class="action-row">
+            <button id="copyBtn" class="btn-secondary" onclick="copyToClipboard()">📋 Copy Hooks</button>
+            <button class="btn-secondary" onclick="generateHooks()">🔄 Try Another</button>
+        </div>
+    </div>
+
+    <footer>
+        Check out my other tool: <br>
+        <a href="https://ai-email-subject-generator-self.vercel.app/" target="_blank">AI Cold Email Subject Line Generator 📧</a>
+    </footer>
+
+    <script>
+        function generateHooks() {
+            const topic = document.getElementById('topic').value.trim();
+            const tone = document.getElementById('tone').value;
+            const resultContainer = document.getElementById('resultContainer');
+            const resultDiv = document.getElementById('result');
+            const btn = document.getElementById('generateBtn');
+
+            if (!topic) {
+                alert("Please enter a topic first!");
+                return;
+            }
+
+            // Loading state
+            btn.innerText = "Generating magic... ✨";
+            btn.disabled = true;
+
+            setTimeout(() => {
+                let hooks = "";
+                if (tone === "Viral") {
+                    hooks = `1. Most people fail at ${topic}. Here is the exact blueprint to win:\n\n2. I spent 100+ hours mastering ${topic} so you don't have to:\n\n3. Stop scrolling if you want to finally master ${topic} today:`;
+                } else if (tone === "Professional") {
+                    hooks = `1. The definitive framework for scaling your results with ${topic}:\n\n2. Three critical insights every professional should know about ${topic}:\n\n3. How top industry leaders approach ${topic} efficiently:`;
+                } else if (tone === "Casual") {
+                    hooks = `1. Let's talk about ${topic}. Here is what actually worked for me:\n\n2. Unpopular opinion: Getting started with ${topic} is way easier than you think.\n\n3. Ever wondered how to get better at ${topic}? Look at this:`;
+                } else {
+                    hooks = `1. What if everything you knew about ${topic} was completely wrong?\n\n2. The hidden secret behind ${topic} nobody is talking about:\n\n3. I tested ${topic} for 30 days. Here is what happened:`;
+                }
+
+                resultDiv.innerText = hooks;
+                resultContainer.style.display = "block";
+                
+                // Reset button
+                btn.innerText = "Generate Hooks";
+                btn.disabled = false;
+            }, 600);
+        }
+
+        function copyToClipboard() {
+            const textToCopy = document.getElementById('result').innerText;
+            const copyBtn = document.getElementById('copyBtn');
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                copyBtn.innerText = "Copied! ✔️";
+                copyBtn.style.background = "#22c55e";
+                copyBtn.style.color = "#0f172a";
+
+                setTimeout(() => {
+                    copyBtn.innerText = "📋 Copy Hooks";
+                    copyBtn.style.background = "#334155";
+                    copyBtn.style.color = "#f8fafc";
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
