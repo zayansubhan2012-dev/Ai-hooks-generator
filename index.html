@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Hooks Generator – Free Social Media & Content Tool</title>
+
+    <!-- Vercel Analytics Script -->
+    <script defer src="/_vercel/insights/script.js"></script>
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            padding: 16px; 
+            line-height: 1.5; 
+            max-width: 520px; 
+            margin: auto; 
+            background-color: #0f172a; 
+            color: #f8fafc; 
+        }
+        h2 { color: #38bdf8; text-align: center; font-size: 22px; margin-bottom: 6px; }
+        p.subtitle { text-align: center; color: #94a3b8; font-size: 13px; margin-bottom: 20px; }
+        
+        label { font-size: 13px; font-weight: 600; color: #cbd5e1; display: block; margin-top: 14px; margin-bottom: 6px; }
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: 1px solid #334155; 
+            background-color: #1e293b; 
+            color: #fff; 
+            font-size: 14px; 
+        }
+        input:focus, select:focus { outline: none; border-color: #38bdf8; }
+
+        /* Quick Idea Chips Styles */
+        .chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .chip {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #38bdf8;
+            padding: 4px 10px;
+            font-size: 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .chip:hover {
+            background: #334155;
+            border-color: #38bdf8;
+        }
+        
+        .btn-primary { 
+            width: 100%; 
+            padding: 13px; 
+            background: #38bdf8; 
+            color: #0f172a; 
+            font-weight: 700; 
+            border: none; 
+            border-radius: 8px; 
+            margin-top: 18px; 
+            cursor: pointer; 
+            font-size: 15px;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover { background: #0ea5e9; }
+        .btn-primary:disabled { background: #64748b; cursor: not-allowed; }
+        
+        .result-container { 
+            position: relative; 
+            margin-top: 22px; 
+            display: none; 
+        }
+        #result { 
+            padding: 16px; 
+            background: #1e293b; 
+            border-radius: 8px; 
+            border: 1px solid #334155; 
+            white-space: pre-line; 
+            font-size: 14px;
+            color: #e2e8f0;
+            min-height: 100px;
+        }
+        
+        .action-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .btn-secondary {
+            flex: 1;
+            min-width: 45%;
+            padding: 10px;
+            background: #334155;
+            color: #f8fafc;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-align: center;
+            text-decoration: none;
+        }
+        .btn-secondary:hover { background: #475569; }
+
+        /* History Section Styles */
+        .history-section {
+            margin-top: 30px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 14px;
+            display: none;
+        }
+        .history-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 8px;
+        }
+        .history-item {
+            font-size: 12px;
+            color: #94a3b8;
+            background: #0f172a;
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            border: 1px solid #1e293b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 35px;
+            padding-top: 15px;
+            border-top: 1px solid #1e293b;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        footer a { color: #38bdf8; text-decoration: none; font-weight: 600; }
+        footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <h2>⚡ AI Hooks Generator</h2>
+    <p class="subtitle">Create viral hooks for your tweets, reels & posts in seconds.</p>
+
+    <label for="topic">What is your content about?</label>
+    <input type="text" id="topic" placeholder="e.g. How I built my first web app">
+    
+    <!-- Quick Idea Chips -->
+    <div class="chips-container">
+        <span class="chip" onclick="setTopic('Startup & Micro-SaaS')">🚀 Startup</span>
+        <span class="chip" onclick="setTopic('Coding & Web Dev')">💻 Coding</span>
+        <span class="chip" onclick="setTopic('Fitness & Gym')">💪 Fitness</span>
+        <span class="chip" onclick="setTopic('Marketing & Growth')">📈 Marketing</span>
+    </div>
+
+    <label for="tone" style="margin-top: 16px;">Select Tone / Style:</label>
+    <select id="tone">
+        <option value="Viral">🔥 Viral & Catchy</option>
+        <option value="Professional">💼 Professional & Authoritative</option>
+        <option value="Casual">☕ Casual & Friendly</option>
+        <option value="Curiosity">🤔 Curiosity & Intrigue</option>
+    </select>
+
+    <button id="generateBtn" class="btn-primary" onclick="generateHooks()">Generate Hooks</button>
+
+    <div class="result-container" id="resultContainer">
+        <div id="result"></div>
+        <div class="action-row">
+            <button id="copyBtn" class="btn-secondary" onclick="copyToClipboard()">📋 Copy Hooks</button>
+            <button class="btn-secondary" onclick="generateHooks()">🔄 Try Another</button>
+            <a id="shareTwitter" class="btn-secondary" href="#" target="_blank">🐦 Share on X</a>
+        </div>
+    </div>
+
+    <!-- Past History Drawer (LocalStorage) -->
+    <div class="history-section" id="historySection">
+        <div class="history-title">🕒 Recent History</div>
+        <div id="historyList"></div>
+    </div>
+
+    <footer>
+        Check out my other tool: <br>
+        <a href="https://ai-email-subject-generator-self.vercel.app/" target="_blank">AI Cold Email Subject Line Generator 📧</a>
+    </footer>
+
+    <script>
+        // Load history on startup
+        window.onload = function() {
+            renderHistory();
+        };
+
+        function setTopic(val) {
+            document.getElementById('topic').value = val;
+        }
+
+        function generateHooks() {
+            const topic = document.getElementById('topic').value.trim();
+            const tone = document.getElementById('tone').value;
+            const resultContainer = document.getElementById('resultContainer');
+            const resultDiv = document.getElementById('result');
+            const btn = document.getElementById('generateBtn');
+
+            if (!topic) {
+                alert("Please enter a topic first!");
+                return;
+            }
+
+            // Loading state with spinner
+            btn.innerText = "Generating... ⏳";
+            btn.disabled = true;
+
+            setTimeout(() => {
+                let hooks = "";
+                if (tone === "Viral") {
+                    hooks = `1. Most people fail at ${topic}. Here is the exact blueprint to win:\n\n2. I spent 100+ hours mastering ${topic} so you don't have to:\n\n3. Stop scrolling if you want to finally master ${topic} today:`;
+                } else if (tone === "Professional") {
+                    hooks = `1. The definitive framework for scaling your results with ${topic}:\n\n2. Three critical insights every professional should know about ${topic}:\n\n3. How top industry leaders approach ${topic} efficiently:`;
+                } else if (tone === "Casual") {
+                    hooks = `1. Let's talk about ${topic}. Here is what actually worked for me:\n\n2. Unpopular opinion: Getting started with ${topic} is way easier than you think.\n\n3. Ever wondered how to get better at ${topic}? Look at this:`;
+                } else {
+                    hooks = `1. What if everything you knew about ${topic} was completely wrong?\n\n2. The hidden secret behind ${topic} nobody is talking about:\n\n3. I tested ${topic} for 30 days. Here is what happened:`;
+                }
+
+                resultDiv.innerText = hooks;
+                resultContainer.style.display = "block";
+                
+                // Reset button
+                btn.innerText = "Generate Hooks";
+                btn.disabled = false;
+
+                // Save to LocalStorage History
+                saveToHistory(topic + " (" + tone + ")");
+
+                // Setup Twitter / X Share Link
+                const tweetText = encodeURIComponent(`Check out these viral hooks for "${topic}" generated via AI Hooks Generator:\n\n${hooks}\n\nTry it free here: https://ai-hooks-generator.vercel.app/`);
+                document.getElementById('shareTwitter').href = `https://twitter.com/intent/tweet?text=${tweetText}`;
+
+            }, 600);
+        }
+
+        function copyToClipboard() {
+            const textToCopy = document.getElementById('result').innerText;
+            const copyBtn = document.getElementById('copyBtn');
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                copyBtn.innerText = "Copied! ✔️";
+                copyBtn.style.background = "#22c55e";
+                copyBtn.style.color = "#0f172a";
+
+                setTimeout(() => {
+                    copyBtn.innerText = "📋 Copy Hooks";
+                    copyBtn.style.background = "#334155";
+                    copyBtn.style.color = "#f8fafc";
+                }, 2000);
+            });
+        }
+
+        function saveToHistory(itemText) {
+            let history = JSON.parse(localStorage.getItem('hook_history')) || [];
+            // Add to front, keep max 3 items
+            history.unshift(itemText);
+            if (history.length > 3) history.pop();
+            localStorage.setItem('hook_history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            let history = JSON.parse(localStorage.getItem('hook_history')) || [];
+            const historySection = document.getElementById('historySection');
+            const historyList = document.getElementById('historyList');
+
+            if (history.length === 0) {
+                historySection.style.display = 'none';
+                return;
+            }
+
+            historySection.style.display = 'block';
+            historyList.innerHTML = '';
+            history.forEach(item => {
+                let div = document.createElement('div');
+                div.className = 'history-item';
+                div.innerText = item;
+                historyList.appendChild(div);
+            });
+        }
+    </script>
+</body>
+</html>
